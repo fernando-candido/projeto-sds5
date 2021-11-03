@@ -18,11 +18,11 @@ const Footer = () => {
             <br />
             Evento promovido pela escola DevSuperior, criado por Fernando Candido:{" "}
             <a
-              href="https://www.instagram.com/fcsj/"
+              href="https://www.linkedin.com/in/fernando-candido-109ba5216/"
               target="_blank"
               rel="noreferrer"
             >
-              @fcsj
+              Linkedin
             </a>
           </small>
         </p>
