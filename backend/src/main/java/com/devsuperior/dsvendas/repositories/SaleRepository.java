@@ -1,11 +1,23 @@
 package com.devsuperior.dsvendas.repositories;
 
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
 
+import com.devsuperior.dsvendas.dto.SaleSuccesDTO;
+import com.devsuperior.dsvendas.dto.SaleSumDTO;
 import com.devsuperior.dsvendas.entities.Sale;
 
 
 public interface SaleRepository extends JpaRepositoryImplementation<Sale, Long>{
 	
-
+	@Query("SELECT NEW com.devsuperior.dsvendas.dto.SaleSumDTO(obj.seller, SUM(obj.amount))"
+			+ "FROM Sale AS obj GROUP BY obj.seller")
+	List<SaleSumDTO>amountGroupedBySeller();
+	
+	
+	@Query("SELECT NEW  com.devsuperior.dsvendas.dto.SaleSuccesDTO(obj.seller, SUM(obj.visited), SUM(obj.deals))"
+			+ "FROM Sale AS obj GROUP BY obj.seller")
+	List<SaleSuccesDTO>succesGroupedBySeller();
 }
