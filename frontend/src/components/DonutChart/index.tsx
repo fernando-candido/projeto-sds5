@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { SaleSum } from "types/sale";
 import { BASE_URL } from "utils/requests";
@@ -9,26 +10,25 @@ type ChartData = {
 };
 
 const DonutChart = () => {
-  //  FORMA ERRADA - só para explicar
-  let chartData: ChartData = { labels: [], series: [] };
+  const [chartData, setChartData] = useState<ChartData>({
+    labels: [],
+    series: [],
+  });
 
-//   const mockData = {
-//     series: [477138, 499928, 444867, 220426, 473088],
-//     labels: ["Anakin", "Barry Allen", "Kal-El", "Logan", "Padmé"],
-//   };
+  useEffect(() => {
+    axios.get(`${BASE_URL}/sales/amount-by-seller`).then((response) => {
+      const data = response.data as SaleSum[];
+      const myLabels = data.map((x) => x.sellerName);
+      const mySeries = data.map((x) => x.sum);
 
-
-    // FORMA ERRADA POIS VAI CHAMAR 2 VEZES.
-    axios.get(`${BASE_URL}/sales/amount-by-seller`)
-    .then( response => {
-
-        const data = response.data as SaleSum[];
-        const myLabels = data.map(x => x.sellerName);
-        const mySeries = data.map(x => x.sum);
-
-        chartData = {labels: myLabels, series: mySeries};
-        console.log(chartData);
+      setChartData({ labels: myLabels, series: mySeries });
     });
+  }, []);
+
+  //   const mockData = {
+  //     series: [477138, 499928, 444867, 220426, 473088],
+  //     labels: ["Anakin", "Barry Allen", "Kal-El", "Logan", "Padmé"],
+  //   };
 
   const options = {
     legend: {
@@ -47,3 +47,20 @@ const DonutChart = () => {
 };
 
 export default DonutChart;
+
+// Forma errada, feito apenas para aprendizado.
+
+//  FORMA ERRADA - só para explicar --> é errado pq não é igual ao ciclo de vida da aplicação.
+//let chartData: ChartData = { labels: [], series: [] };
+
+// FORMA ERRADA - entrar em loop e estourar a memoria do navegador
+// axios.get(`${BASE_URL}/sales/amount-by-seller`)
+// .then( response => {
+
+//     const data = response.data as SaleSum[];
+//     const myLabels = data.map(x => x.sellerName);
+//     const mySeries = data.map(x => x.sum);
+
+//     setChartData({labels: myLabels, series: mySeries});
+//     console.log(chartData);
+// });
