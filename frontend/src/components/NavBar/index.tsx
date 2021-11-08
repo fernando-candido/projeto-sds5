@@ -16,4 +16,3 @@ const NavBar = () => {
 };
 
 export default NavBar;
-// teste
